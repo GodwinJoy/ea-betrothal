@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Edwin &amp; Ann Mariya | Betrothal Invitation</title>
+    <meta name="description" content="Join Edwin and Ann Mariya as they celebrate their Betrothal Ceremony on Wednesday, 21 October 2026 at 3:00 PM. A sacred promise, blessed by God and family.">
+    <meta name="theme-color" content="#f3ead8">
+
+    <!-- TAILWIND -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- GOOGLE FONTS: Allura (script), Cormorant Garamond (serif display), Poppins (sans-serif body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- FONT AWESOME (decorative icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" href="./medias/couple.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <noscript>
+        <div style="position:fixed;inset:0;z-index:999999;background:#faf7f0;color:#5b3f25;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-family:serif;">
+            Please enable JavaScript to view Edwin &amp; Ann Mariya's Betrothal Invitation. This page relies on JavaScript for the entry animation and content reveal.
+        </div>
+    </noscript>
+
+    <!-- DECORATIVE FLOWER LAYERS (celebratory transition, not persistent) -->
+    <div id="flowerContainer" class="fixed inset-0 pointer-events-none overflow-hidden z-[60]" aria-hidden="true"></div>
+    <div id="flowerGlow" class="fixed inset-0 pointer-events-none z-[59] overflow-hidden" aria-hidden="true"></div>
+    <!-- COUNTDOWN COMPLETION CELEBRATION -->
+<div id="countdownCelebration"
+    class="fixed inset-0 z-[99990] hidden items-center justify-center overflow-hidden bg-[#f4ead8]/95 backdrop-blur-xl"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="celebrationTitle"
+    aria-hidden="true">
+
+    <!-- BACKGROUND -->
+    <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_center,_#fffdf8_0%,_#f3ead8_52%,_#d8c29a_100%)]">
+    </div>
+
+    <!-- DECORATIVE CIRCLES -->
+    <div
+        class="absolute w-[300px] sm:w-[480px] h-[300px] sm:h-[480px] rounded-full border border-[#b68c45]/15">
+    </div>
+
+    <div
+        class="absolute w-[220px] sm:w-[360px] h-[220px] sm:h-[360px] rounded-full border border-[#b68c45]/15">
+    </div>
+
+    <!-- GLOW -->
+    <div
+        class="absolute left-1/2 top-1/2 w-[280px] sm:w-[440px] h-[280px] sm:h-[440px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#d8b46c]/25 blur-[100px]">
+    </div>
+
+    <!-- CONTENT -->
+    <div
+        class="relative z-10 w-full max-w-3xl px-6 text-center">
+
+        <!-- EMBLEM -->
+        <div id="celebrationEmblem"
+            class="mx-auto mb-7 flex h-16 w-16 scale-75 items-center justify-center rounded-full border border-[#b68c45]/30 bg-[#fffdf8]/70 opacity-0 shadow-[0_18px_45px_rgba(91,63,37,0.12)]">
+
+            <i class="fa-solid fa-ring text-xl text-[#b68c45]"></i>
+        </div>
+
+        <!-- LABEL -->
+        <div id="celebrationLabel"
+            class="mb-5 flex translate-y-5 items-center justify-center gap-4 opacity-0">
+
+            <span class="h-[1px] w-10 sm:w-16 bg-[#b68c45]/40"></span>
+
+            <p
+                class="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[6px] sm:tracking-[9px] text-[#7a552e]">
+                The Blessed Day Is Here
+            </p>
+
+            <span class="h-[1px] w-10 sm:w-16 bg-[#b68c45]/40"></span>
+        </div>
+
+        <!-- TITLE -->
+        <h2 id="celebrationTitle"
+            class="elegant-font translate-y-8 text-[clamp(2.7rem,9vw,5.8rem)] leading-[0.88] tracking-[-2px] text-[#5b3f25] opacity-0">
+
+            The Promise
+
+            <span class="block italic text-[#b68c45]">
+                Begins Today
+            </span>
+        </h2>
+
+        <!-- TEXT -->
+        <p id="celebrationMessage"
+            class="mx-auto mt-7 max-w-xl translate-y-6 text-[13px] sm:text-[15px] font-light leading-7 text-[#5d4a36] opacity-0">
+
+            With grateful hearts and the blessings of our families,
+            we celebrate the Betrothal of Edwin and Ann Mariya.
+        </p>
+
+        <!-- DATE -->
+        <p id="celebrationDate"
+            class="mt-7 translate-y-5 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[4px] sm:tracking-[6px] text-[#7a552e] opacity-0">
+
+            21 October 2026 · 3:30 PM IST
+        </p>
+
+        <!-- BUTTON -->
+        <button id="closeCountdownCelebration"
+            type="button"
+            class="group relative mt-9 min-h-[44px] translate-y-5 overflow-hidden border border-[#b68c45]/40 px-7 py-3 text-[9px] font-semibold uppercase tracking-[4px] text-[#5b3f25] opacity-0 transition-all duration-500 hover:border-[#5b3f25] hover:text-white">
+
+            <span
+                class="absolute inset-0 origin-left scale-x-0 bg-[#5b3f25] transition-transform duration-700 group-hover:scale-x-100">
+            </span>
+
+            <span class="relative flex items-center gap-3">
+                <span class="h-[1px] w-5 bg-current/60"></span>
+                Enter The Celebration
+                <span class="h-[1px] w-5 bg-current/60"></span>
+            </span>
+        </button>
+
+    </div>
+</div>
+
+    <!-- ============================================================
+         INTRO / ENTRY GATE
+    ============================================================= -->
+<!-- INTRO - BETROTHAL EDITION -->
+<section id="intro"
+    class="fixed inset-0 z-[999999] flex items-center justify-center overflow-hidden bg-[#faf7f0]"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Betrothal invitation entry">
+
+    <!-- BACKGROUND -->
+    <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_top,_#fffdf8_0%,_#f3ead8_45%,_#d8c29a_100%)]">
+    </div>
+
+    <!-- SUBTLE DECORATIVE CIRCLES -->
+    <div
+        class="absolute w-[260px] sm:w-[360px] md:w-[470px] h-[260px] sm:h-[360px] md:h-[470px] rounded-full border border-[#b89152]/10"
+        aria-hidden="true">
+    </div>
+
+    <div
+        class="absolute w-[200px] sm:w-[290px] md:w-[380px] h-[200px] sm:h-[290px] md:h-[380px] rounded-full border border-[#b89152]/10"
+        aria-hidden="true">
+    </div>
+
+    <!-- PARTICLES -->
+    <div id="introParticles"
+        class="absolute inset-0 overflow-hidden pointer-events-none"
+        aria-hidden="true">
+
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div
+        class="relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-8 flex flex-col items-center justify-center text-center">
+
+        <!-- TOP TEXT -->
+        <p
+            class="intro-kicker opacity-0 translate-y-4 tracking-[5px] sm:tracking-[8px] text-[#8a6a3f] text-[9px] sm:text-[11px] uppercase font-medium mb-4">
+
+            A Promise Forever
+
+        </p>
+
+        <!-- RINGS -->
+        <div
+            class="relative w-[220px] sm:w-[290px] md:w-[340px] h-[100px] sm:h-[120px] md:h-[135px] flex items-center justify-center mb-2"
+            aria-hidden="true">
+
+            <!-- GOLDEN BURST -->
+            <div id="ringBurst"
+                class="absolute w-20 h-20 rounded-full bg-[#d8b46c]/35 blur-[35px] scale-0 opacity-0">
+            </div>
+
+            <!-- LEFT RING -->
+            <svg id="leftRing"
+                class="svg-ring ring-left"
+                viewBox="0 0 120 120"
+                aria-hidden="true">
+
+                <defs>
+                    <linearGradient id="goldRingLeft"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%">
+
+                        <stop offset="0%" stop-color="#76502c" />
+                        <stop offset="30%" stop-color="#c99b55" />
+                        <stop offset="58%" stop-color="#fff0af" />
+                        <stop offset="78%" stop-color="#d6aa63" />
+                        <stop offset="100%" stop-color="#8e6032" />
+
+                    </linearGradient>
+
+                    <linearGradient id="diamondLeft"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%">
+
+                        <stop offset="0%" stop-color="#ffffff" />
+                        <stop offset="45%" stop-color="#fff4ce" />
+                        <stop offset="100%" stop-color="#d4ae67" />
+
+                    </linearGradient>
+                </defs>
+
+                <!-- BAND -->
+                <circle
+                    cx="60"
+                    cy="66"
+                    r="34"
+                    fill="none"
+                    stroke="url(#goldRingLeft)"
+                    stroke-width="9">
+                </circle>
+
+                <!-- DIAMOND -->
+                <polygon
+                    points="60,15 73,28 60,42 47,28"
+                    fill="url(#diamondLeft)">
+                </polygon>
+
+                <!-- DIAMOND HIGHLIGHT -->
+                <path
+                    d="M60 15 L60 42 M47 28 H73 M60 15 L47 28 M60 15 L73 28"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.65)"
+                    stroke-width="1">
+                </path>
+
+            </svg>
+
+            <!-- RIGHT RING -->
+            <svg id="rightRing"
+                class="svg-ring ring-right"
+                viewBox="0 0 120 120"
+                aria-hidden="true">
+
+                <defs>
+                    <linearGradient id="goldRingRight"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%">
+
+                        <stop offset="0%" stop-color="#76502c" />
+                        <stop offset="30%" stop-color="#c99b55" />
+                        <stop offset="58%" stop-color="#fff0af" />
+                        <stop offset="78%" stop-color="#d6aa63" />
+                        <stop offset="100%" stop-color="#8e6032" />
+
+                    </linearGradient>
+
+                    <linearGradient id="diamondRight"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%">
+
+                        <stop offset="0%" stop-color="#ffffff" />
+                        <stop offset="45%" stop-color="#fff4ce" />
+                        <stop offset="100%" stop-color="#d4ae67" />
+
+                    </linearGradient>
+                </defs>
+
+                <!-- BAND -->
+                <circle
+                    cx="60"
+                    cy="66"
+                    r="34"
+                    fill="none"
+                    stroke="url(#goldRingRight)"
+                    stroke-width="9">
+                </circle>
+
+                <!-- DIAMOND -->
+                <polygon
+                    points="60,15 73,28 60,42 47,28"
+                    fill="url(#diamondRight)">
+                </polygon>
+
+                <!-- DIAMOND HIGHLIGHT -->
+                <path
+                    d="M60 15 L60 42 M47 28 H73 M60 15 L47 28 M60 15 L73 28"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.65)"
+                    stroke-width="1">
+                </path>
+
+            </svg>
+
+        </div>
+
+        <!-- INVITATION TEXT -->
+        <div id="betrothalText"
+            class="opacity-0 translate-y-6">
+
+            <!-- LABEL -->
+            <div class="flex items-center justify-center gap-3 mb-3">
+
+                <span
+                    class="w-10 sm:w-16 h-[1px] bg-[#9b7a45]/35"
+                    aria-hidden="true">
+                </span>
+
+                <p
+                    class="tracking-[5px] sm:tracking-[10px] text-[#8a6a3f] text-[9px] sm:text-[11px] uppercase font-semibold">
+
+                    Betrothal
+
+                </p>
+
+                <span
+                    class="w-10 sm:w-16 h-[1px] bg-[#9b7a45]/35"
+                    aria-hidden="true">
+                </span>
+
+            </div>
+
+            <!-- NAMES -->
+            <h1
+                class="elegant-font text-[#5b3f25] text-[clamp(2.5rem,10vw,5rem)] leading-[0.9] drop-shadow-[0_10px_24px_rgba(91,63,37,0.12)]">
+
+                Edwin
+
+                <span class="text-[#b89152] text-[0.55em] mx-1 sm:mx-2">
+                    &amp;
+                </span>
+
+                Ann Mariya
+
+            </h1>
+
+            <!-- DESCRIPTION -->
+            <div class="mt-6 flex flex-col items-center">
+
+                <p
+                    class="max-w-[520px] mx-auto text-[#6f5a3f] text-[11px] sm:text-[13px] tracking-[1.3px] leading-7 font-light">
+
+                    A beautiful journey begins with a promise.
+
+                    <br class="hidden sm:block">
+
+                    We invite you to celebrate this cherished moment with us.
+
+                </p>
+
+            </div>
+
+            <!-- ENTER BUTTON -->
+            <button id="enterWebsite"
+                type="button"
+                class="group relative mt-7 min-h-[44px] px-7 sm:px-10 py-3.5 overflow-hidden border border-[#9b7a45]/45 bg-white/15 uppercase tracking-[3.5px] sm:tracking-[5px] font-medium text-[10px] sm:text-[11px] text-[#6a4827] transition-all duration-500 hover:text-white hover:border-[#7a552e] active:scale-95 opacity-0 translate-y-5"
+                aria-label="Witness the promise and enter the invitation">
+
+                <!-- BUTTON FILL -->
+                <span
+                    class="absolute inset-0 scale-x-0 origin-left bg-gradient-to-r from-[#7a552e] to-[#c8a46b] transition-transform duration-700 group-hover:scale-x-100"
+                    aria-hidden="true">
+                </span>
+
+                <!-- BUTTON CONTENT -->
+                <span class="relative flex items-center gap-3">
+
+                    <span
+                        class="w-6 h-[1px] bg-current/60"
+                        aria-hidden="true">
+                    </span>
+
+                    Witness The Promise
+
+                    <span
+                        class="w-6 h-[1px] bg-current/60"
+                        aria-hidden="true">
+                    </span>
+
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+    <!-- MUSIC TOGGLE -->
+    <button id="musicToggle" type="button"
+        class="fixed bottom-6 right-6 z-[9000] w-14 h-14 sm:w-16 sm:h-16 rounded-full music-btn opacity-0 pointer-events-none"
+        style="bottom: max(1.5rem, env(safe-area-inset-bottom))"
+        aria-label="Play background music" aria-pressed="false">
+        <i class="fa-solid fa-music" aria-hidden="true"></i>
+    </button>
+
+    <audio id="bgMusic" loop preload="none">
+        <source src="./medias/leberch-invitation-wedding-375839.mp3" type="audio/mpeg">
+    </audio>
+
+    <main id="websiteContent">
+
+        <!-- CUSTOM CURSOR (desktop, fine pointer only) -->
+        <div id="custom-cursor" aria-hidden="true"></div>
+        <div id="cursor-follower" aria-hidden="true"></div>
+
+        <!-- SCROLL PROGRESS -->
+        <nav class="fixed top-6 right-6 sm:top-10 sm:right-10 z-[90] hidden md:block" aria-hidden="true">
+            <div class="progress-round w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center relative">
+                <svg class="w-full h-full rotate-[-90deg]">
+                    <circle cx="32" cy="32" r="28" stroke="white" stroke-width="4" fill="transparent" />
+                    <circle id="scroll-circle" cx="32" cy="32" r="28" stroke="#b68c45" stroke-width="4" fill="transparent" stroke-dasharray="176" stroke-dashoffset="176" />
+                </svg>
+                <span id="scroll-percent" class="absolute text-[11px] font-semibold text-[#7a552e]">0%</span>
+            </div>
+        </nav>
+
+        <!-- ============================================================
+             HERO
+        ============================================================= -->
+        <section id="hero" class="relative min-h-[100svh] flex items-center justify-center px-4 py-10 overflow-hidden bg-[#efe1c4]">
+
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_#fffaf0_0%,_#ead7b3_58%,_#d2b47f_100%)]" aria-hidden="true"></div>
+
+            <div id="hero-card-reveal"
+                class="relative z-10 w-full max-w-[1100px] mt-6 md:mt-10 bg-[#fffaf0] shadow-[0_32px_80px_rgba(91,63,37,0.18)] border border-[#f6e8c8]/80"
+                style="visibility:hidden">
+
+                <div class="relative grid grid-cols-1 lg:grid-cols-[1fr_0.82fr] min-h-[520px] lg:h-[590px]">
+
+                    <div class="absolute top-7 left-7 text-[#b68c45]/65 text-lg hidden sm:block" aria-hidden="true"><i class="fa-solid fa-seedling rotate-[-45deg]"></i></div>
+                    <div class="absolute top-7 right-7 text-[#b68c45]/65 text-lg hidden sm:block" aria-hidden="true"><i class="fa-solid fa-seedling rotate-[45deg]"></i></div>
+                    <div class="absolute bottom-7 left-7 text-[#b68c45]/65 text-lg hidden sm:block" aria-hidden="true"><i class="fa-solid fa-seedling rotate-[-135deg]"></i></div>
+                    <div class="absolute bottom-7 right-7 text-[#b68c45]/65 text-lg hidden sm:block" aria-hidden="true"><i class="fa-solid fa-seedling rotate-[135deg]"></i></div>
+
+                    <div class="relative flex flex-col items-center justify-center text-center px-7 sm:px-10 lg:px-12 py-10 order-2 lg:order-1">
+
+                        <div class="hero-stagger flex items-center justify-center gap-4 mb-5">
+                            <span class="w-10 sm:w-14 h-[1px] bg-[#b68c45]/45" aria-hidden="true"></span>
+                            <p class="uppercase tracking-[7px] text-[8px] sm:text-[9px] text-[#7a552e] font-semibold">Betrothal Ceremony</p>
+                            <span class="w-10 sm:w-14 h-[1px] bg-[#b68c45]/45" aria-hidden="true"></span>
+                        </div>
+
+                        <h1 class="hero-stagger elegant-font text-[#5b3f25] text-[clamp(2.5rem,7vw,4rem)] leading-[0.9] tracking-[-1px] pt-3">
+                            Edwin <span class="italic text-[#b68c45] text-[0.5em] align-middle">&amp;</span> Ann Mariya
+                        </h1>
+
+                        <div class="hero-stagger mt-6 mb-5 flex items-center justify-center gap-2" aria-hidden="true">
+                            <span class="w-16 h-[1px] bg-[#b68c45]/35"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#b68c45]/65"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#b68c45]/65"></span>
+                            <span class="w-16 h-[1px] bg-[#b68c45]/35"></span>
+                        </div>
+
+                        <p class="hero-stagger max-w-sm text-[#6f5a3f] text-[12px] sm:text-[13px] leading-7 tracking-[1px] font-light">
+                            With the blessings of our families,<br>
+                            we joyfully invite you to witness<br>
+                            our Betrothal Ceremony.
+                        </p>
+
+                        <div class="hero-stagger mt-3 text-[#b68c45]/70 text-xs" aria-hidden="true">
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+                    </div>
+
+                    <div class="absolute hidden lg:block top-9 bottom-9 left-[55%] w-[1px] bg-[#b68c45]/20" aria-hidden="true"></div>
+                    <div class="absolute hidden lg:flex top-1/2 left-[55%] -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#fffaf0] border border-[#b68c45]/28 items-center justify-center" aria-hidden="true">
+                        <i class="fa-solid fa-diamond text-[#b68c45] text-[7px]"></i>
+                    </div>
+
+                    <div class="relative order-1 lg:order-2 min-h-[280px] sm:min-h-[330px] lg:min-h-full overflow-hidden px-6 py-6 lg:pl-8 lg:pr-10 lg:py-10 flex items-center justify-center">
+                        <div class="relative w-full max-w-[390px] h-full max-h-[510px] overflow-hidden bg-[#ead7b3] shadow-[0_22px_55px_rgba(91,63,37,0.16)]">
+                            <img src="./medias/couple.png" alt="Edwin and Ann Mariya together"
+                                class="w-full h-full object-cover object-center scale-[1.02]"
+                                width="390" height="510" fetchpriority="high" decoding="async">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             THE PROMISE / STORY
+        ============================================================= -->
+        <section id="promise" class="relative py-20 md:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-[#fff8e9]">
+
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_#fffaf0_0%,_#ead7b3_58%,_#d2b47f_100%)]" aria-hidden="true"></div>
+            <div class="absolute top-1/2 left-1/2 w-[520px] h-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#b68c45]/10" aria-hidden="true"></div>
+            <div class="absolute top-1/2 left-1/2 w-[700px] h-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#b68c45]/10" aria-hidden="true"></div>
+            <div class="absolute -top-32 -left-24 w-[320px] md:w-[460px] h-[320px] md:h-[460px] rounded-full bg-[#b68c45]/18 blur-[120px]" aria-hidden="true"></div>
+            <div class="absolute -bottom-32 -right-24 w-[320px] md:w-[460px] h-[320px] md:h-[460px] rounded-full bg-[#6a7660]/12 blur-[120px]" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-[0.9fr_1fr] gap-10 lg:gap-16 items-center">
+
+                <div class="relative group order-2 lg:order-1">
+                    <div class="relative bg-[#fffaf0] p-4 sm:p-5 shadow-[0_35px_90px_rgba(91,63,37,0.18)] border border-[#f6e8c8]/80">
+                        <div class="relative overflow-hidden">
+                            <img src="./medias/couple2.png" alt="Edwin and Ann Mariya, a candid portrait"
+                                class="story-image w-full h-[340px] sm:h-[440px] md:h-[520px] object-cover object-top transition-transform duration-[3000ms] group-hover:scale-105"
+                                width="700" height="520" loading="lazy" decoding="async">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#5b3f25]/18 via-transparent to-[#fffaf0]/15" aria-hidden="true"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-content relative z-10 order-1 lg:order-2">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="w-12 h-[1px] bg-[#b68c45]/55" aria-hidden="true"></span>
+                        <p class="uppercase tracking-[5px] text-[#7a552e] text-[10px] sm:text-xs font-semibold">The Promise</p>
+                    </div>
+
+                    <h2 class="elegant-font text-[clamp(2.5rem,7vw,5.1rem)] leading-[0.9] text-[#5b3f25] mb-7 tracking-[-1px] font-medium">
+                        A Journey
+                        <span class="block text-[#b68c45] italic mt-2">Blessed By God</span>
+                    </h2>
+
+                    <div class="relative pl-5 sm:pl-6">
+                        <div class="absolute left-0 top-1 w-[1px] h-full bg-gradient-to-b from-[#b68c45] via-[#d9c9a8] to-transparent" aria-hidden="true"></div>
+                        <p class="text-[14px] sm:text-[15px] leading-8 text-[#5d4a36] max-w-xl font-light tracking-[0.3px]">
+                            What began with friendship gently grew into a beautiful bond guided by prayer, grace, and the blessings of family.
+                            <br><br>
+                            Through every season, God prepared their hearts for this cherished moment of promise, faith, and togetherness.
+                            <br><br>
+                            As Edwin and Ann Mariya step into their Betrothal, they begin a new chapter surrounded by love and blessings.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             SAVE THE DATE + PETAL REVEAL + COUNTDOWN
+        ============================================================= -->
+        <section id="save-the-date" class="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden bg-[#fff8e9]">
+
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_#fffaf0_0%,_#ead7b3_58%,_#d2b47f_100%)]" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-6xl mx-auto">
+
+                <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-16 items-center mb-20 sm:mb-24">
+
+                    <div class="text-center lg:text-left">
+                        <div class="flex items-center justify-center lg:justify-start gap-4 mb-5">
+                            <span class="w-12 h-[1px] bg-[#b68c45]/50" aria-hidden="true"></span>
+                            <p class="uppercase tracking-[7px] text-[10px] text-[#7a552e] font-semibold">Mark The Day</p>
+                        </div>
+
+                        <h2 class="elegant-font text-[#5b3f25] text-[clamp(2.8rem,9vw,5.4rem)] leading-[0.88] tracking-[-2px]">
+                            Save
+                            <span class="block italic text-[#b68c45]">The Date</span>
+                        </h2>
+
+                        <p class="mt-6 max-w-md mx-auto lg:mx-0 text-[#5d4a36] text-[14px] sm:text-[15px] leading-8 font-light">
+                            A promise, a prayer, and a blessed beginning. Join us as we celebrate the Betrothal of Edwin and Ann Mariya.
+                        </p>
+
+
+                    </div>
+
+                    <div class="relative flex justify-center lg:justify-end">
+                        <div class="relative w-full max-w-[430px] min-h-[480px] sm:min-h-[520px] bg-[#fffaf0] border border-[#f6e8c8]/90 shadow-[0_35px_90px_rgba(91,63,37,0.16)] flex items-center justify-center p-6 sm:p-8">
+
+                            <div class="absolute top-5 left-5 w-10 h-10 border-t border-l border-[#b68c45]/35" aria-hidden="true"></div>
+                            <div class="absolute top-5 right-5 w-10 h-10 border-t border-r border-[#b68c45]/35" aria-hidden="true"></div>
+                            <div class="absolute bottom-5 left-5 w-10 h-10 border-b border-l border-[#b68c45]/35" aria-hidden="true"></div>
+                            <div class="absolute bottom-5 right-5 w-10 h-10 border-b border-r border-[#b68c45]/35" aria-hidden="true"></div>
+
+                            <div id="petalRevealCard"
+                                class="relative w-[250px] h-[380px] sm:w-[275px] sm:h-[400px] overflow-hidden bg-[#fffdf8] border border-[#b68c45]/20 shadow-[0_22px_60px_rgba(91,63,37,0.14)]"
+                                role="group" aria-label="Reveal the betrothal date by swiping away the petals">
+
+                                <div class="absolute inset-[9px] border border-[#b68c45]/15 z-10 pointer-events-none" aria-hidden="true"></div>
+
+                                <div id="saveDateContent" class="absolute inset-0 z-0 flex flex-col items-center justify-center px-6 opacity-0 scale-[0.92] blur-sm transition-all duration-[1400ms]">
+                                    <div class="text-center">
+                                        <p class="uppercase tracking-[6px] text-sm text-[#8b6f43] pt-5">Save The Date</p>
+                                    </div>
+
+                                    <div class="w-[170px] bg-[#fffdf8] px-6 py-7 flex flex-col items-center text-center">
+                                        <div class="w-11 h-11 rounded-full border border-[#b68c45]/20 bg-[#faf7ef] flex items-center justify-center mb-5" aria-hidden="true">
+                                            <i class="fa-solid fa-calendar-days text-[#b68c45] text-sm"></i>
+                                        </div>
+
+                                        <h2 class="text-[#3f2b1b] text-[58px] leading-none font-light">21</h2>
+                                        <p class="mt-2 uppercase tracking-[5px] text-[10px]">October</p>
+                                        <p class="mt-1 uppercase tracking-[3px] text-[10px]">2026</p>
+
+                                        <div class="w-10 h-[1px] bg-[#b68c45]/25 my-5" aria-hidden="true"></div>
+
+                                        <p class="uppercase tracking-[5px] text-[8px] text-[#7a552e]">Wednesday</p>
+                                        <p class="mt-1 text-[#5b3f25] text-[11px] tracking-[2px]">3:00 PM</p>
+                                    </div>
+                                </div>
+
+                                <!-- PETAL LAYER -->
+                                <div id="petalLayer" class="absolute inset-0 z-20 overflow-hidden bg-[linear-gradient(to_bottom,#fffaf0,#ead7b3)]">
+                                    <div id="petalField" class="absolute inset-0"></div>
+
+                                    <div id="petalHint" class="absolute inset-0 flex flex-col items-center justify-center z-30 pointer-events-none">
+                                        <div class="w-14 h-14 rounded-full bg-[#fffdf8]/85 border border-[#b68c45]/25 flex items-center justify-center shadow-[0_12px_30px_rgba(91,63,37,0.12)]" aria-hidden="true">
+                                            <i class="fa-solid fa-hand-pointer text-[#b68c45] text-base floating"></i>
+                                        </div>
+
+                                        <button id="petalRevealFallback" type="button"
+                                            class="mt-4 min-h-[36px] px-4 py-2 text-[8px] uppercase tracking-[3px] font-semibold text-[#7a552e] border border-[#b68c45]/35 pointer-events-auto hover:bg-[#7a552e] hover:text-white transition-colors duration-300"
+                                            aria-label="Tap to reveal the betrothal date">
+                                            Swipe or Tap To Reveal
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+               
+<!-- COUNTDOWN - TRUE NEUMORPHIC BETROTHAL PANEL -->
+<div id="countdownSection"
+    class="relative opacity-0 translate-y-[60px]">
+
+    <!-- HEADING -->
+    <div class="text-center mb-10 sm:mb-12">
+
+        <div class="flex items-center justify-center gap-4 mb-4">
+            <span class="w-12 sm:w-16 h-[1px] bg-[#b68c45]/35"></span>
+
+            <p
+                class="uppercase tracking-[6px] sm:tracking-[9px] text-[#7a552e] text-[9px] sm:text-[10px] font-semibold">
+                Countdown To The Promise
+            </p>
+
+            <span class="w-12 sm:w-16 h-[1px] bg-[#b68c45]/35"></span>
+        </div>
+
+        <h2
+            class="elegant-font text-[#3f2b1b] text-[clamp(2.4rem,7vw,4.8rem)] leading-[0.9] tracking-[-1.5px]">
+            Until The
+            <span class="italic text-[#b68c45]">
+                Betrothal
+            </span>
+        </h2>
+
+    </div>
+
+    <!-- OUTER NEUMORPHIC PANEL -->
+    <div
+        id="countdownGrid"
+        class="max-w-6xl mx-auto rounded-[34px] bg-[#f4ead8] p-3 sm:p-4
+        shadow-[16px_rgba(137,105,55,0.18),-16px_-16px_34px_rgba(255,255,255,0.88)]"
+        role="timer"
+        aria-live="off"
+        aria-label="Countdown to the betrothal ceremony on Wednesday 21 October 2026 at 3:30 PM IST">
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+
+            <!-- DAYS -->
+            <div
+                class="relative rounded-[26px] bg-[#f4ead8] px-4 py-7 sm:py-8 text-center
+                shadow-[inset_7px_7px_15px_rgba(137,105,55,0.14),inset_-7px_-7px_15px_rgba(255,255,255,0.82)]">
+
+                <div
+                    class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-5 rounded-full bg-[#f4ead8]
+                    flex items-center justify-center
+                    shadow-[7px_7px_14px_rgba(137,105,55,0.14),-7px_-7px_14px_rgba(255,255,255,0.88)]"
+                    aria-hidden="true">
+
+                    <i class="fa-regular fa-calendar text-[#b68c45] text-lg"></i>
+                </div>
+
+                <h2 id="days"
+                    class="elegant-font text-[#3f2b1b] text-[48px] sm:text-[58px] leading-none"
+                    aria-hidden="true">
+                    00
+                </h2>
+
+                <div class="w-8 h-[1px] bg-[#b68c45]/35 mx-auto my-4"></div>
+
+                <p
+                    class="uppercase tracking-[4px] sm:tracking-[5px] text-[8px] sm:text-[9px] text-[#7a552e] font-semibold">
+                    Days
+                </p>
+            </div>
+
+            <!-- HOURS -->
+            <div
+                class="relative rounded-[26px] bg-[#f4ead8] px-4 py-7 sm:py-8 text-center
+                shadow-[inset_7px_7px_15px_rgba(137,105,55,0.14),inset_-7px_-7px_15px_rgba(255,255,255,0.82)]">
+
+                <div
+                    class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-5 rounded-full bg-[#f4ead8]
+                    flex items-center justify-center
+                    shadow-[7px_7px_14px_rgba(137,105,55,0.14),-7px_-7px_14px_rgba(255,255,255,0.88)]"
+                    aria-hidden="true">
+
+                    <i class="fa-regular fa-clock text-[#b68c45] text-lg"></i>
+                </div>
+
+                <h2 id="hours"
+                    class="elegant-font text-[#3f2b1b] text-[48px] sm:text-[58px] leading-none"
+                    aria-hidden="true">
+                    00
+                </h2>
+
+                <div class="w-8 h-[1px] bg-[#b68c45]/35 mx-auto my-4"></div>
+
+                <p
+                    class="uppercase tracking-[4px] sm:tracking-[5px] text-[8px] sm:text-[9px] text-[#7a552e] font-semibold">
+                    Hours
+                </p>
+            </div>
+
+            <!-- MINUTES -->
+            <div
+                class="relative rounded-[26px] bg-[#f4ead8] px-4 py-7 sm:py-8 text-center
+                shadow-[inset_7px_7px_15px_rgba(137,105,55,0.14),inset_-7px_-7px_15px_rgba(255,255,255,0.82)]">
+
+                <div
+                    class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-5 rounded-full bg-[#f4ead8]
+                    flex items-center justify-center
+                    shadow-[7px_7px_14px_rgba(137,105,55,0.14),-7px_-7px_14px_rgba(255,255,255,0.88)]"
+                    aria-hidden="true">
+
+                    <i class="fa-regular fa-hourglass-half text-[#b68c45] text-lg"></i>
+                </div>
+
+                <h2 id="minutes"
+                    class="elegant-font text-[#3f2b1b] text-[48px] sm:text-[58px] leading-none"
+                    aria-hidden="true">
+                    00
+                </h2>
+
+                <div class="w-8 h-[1px] bg-[#b68c45]/35 mx-auto my-4"></div>
+
+                <p
+                    class="uppercase tracking-[4px] sm:tracking-[5px] text-[8px] sm:text-[9px] text-[#7a552e] font-semibold">
+                    Minutes
+                </p>
+            </div>
+
+            <!-- SECONDS -->
+            <div
+                class="relative rounded-[26px] bg-[#f4ead8] px-4 py-7 sm:py-8 text-center
+                shadow-[inset_7px_7px_15px_rgba(137,105,55,0.14),inset_-7px_-7px_15px_rgba(255,255,255,0.82)]">
+
+                <div
+                    class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-5 rounded-full bg-[#f4ead8]
+                    flex items-center justify-center
+                    shadow-[7px_7px_14px_rgba(137,105,55,0.14),-7px_-7px_14px_rgba(255,255,255,0.88)]"
+                    aria-hidden="true">
+
+                    <i class="fa-solid fa-ring text-[#b68c45] text-lg floating"></i>
+                </div>
+
+                <h2 id="seconds"
+                    class="elegant-font text-[#3f2b1b] text-[48px] sm:text-[58px] leading-none"
+                    aria-hidden="true">
+                    00
+                </h2>
+
+                <div class="w-8 h-[1px] bg-[#b68c45]/35 mx-auto my-4"></div>
+
+                <p
+                    class="uppercase tracking-[4px] sm:tracking-[5px] text-[8px] sm:text-[9px] text-[#7a552e] font-semibold">
+                    Seconds
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DATE FOOTNOTE -->
+    <div
+        class="mt-8 flex items-center justify-center gap-4 text-[#7a552e]">
+
+        <span class="w-10 sm:w-14 h-[1px] bg-[#b68c45]/35"></span>
+
+        <p
+            class="uppercase tracking-[4px] sm:tracking-[6px] text-[8px] sm:text-[9px] font-semibold text-center">
+            Wednesday · 21 October 2026 · 3:30 PM IST
+        </p>
+
+        <span class="w-10 sm:w-14 h-[1px] bg-[#b68c45]/35"></span>
+    </div>
+
+    <p id="countdownSrText" class="sr-only" aria-live="polite"></p>
+
+</div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================
+             VENUE
+        ============================================================= -->
+        <section id="venue" class="relative py-16 sm:py-20 px-4 sm:px-6 overflow-hidden bg-[#fff8e9]">
+
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_#fffaf0_0%,_#ead7b3_58%,_#d2b47f_100%)]" aria-hidden="true"></div>
+            <div class="absolute -top-24 -left-20 w-[260px] h-[260px] rounded-full bg-[#b68c45]/14 blur-[90px]" aria-hidden="true"></div>
+            <div class="absolute -bottom-24 -right-20 w-[260px] h-[260px] rounded-full bg-[#6a7660]/10 blur-[90px]" aria-hidden="true"></div>
+            <div class="absolute top-1/2 left-1/2 w-[460px] h-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#b68c45]/10" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-6xl mx-auto">
+
+                <div class="venue-heading text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+                    <div class="flex items-center justify-center gap-4 mb-3">
+                        <span class="w-10 sm:w-14 h-[1px] bg-[#b68c45]/45" aria-hidden="true"></span>
+                        <p class="uppercase tracking-[6px] sm:tracking-[8px] text-[#7a552e] text-[8px] sm:text-[9px] font-semibold">The Celebration</p>
+                        <span class="w-10 sm:w-14 h-[1px] bg-[#b68c45]/45" aria-hidden="true"></span>
+                    </div>
+
+                    <h2 class="elegant-font text-[#5b3f25] text-[clamp(1.9rem,6vw,3rem)] leading-[0.9] tracking-[-1px]">
+                        Where We Begin <span class="italic text-[#b68c45]">Forever</span>
+                    </h2>
+
+                    <p class="mt-3 text-[13px] text-[#5d4a36] leading-6 max-w-xl mx-auto font-light">
+                        A blessed day of prayer, promise, family, and joyful celebration.
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+
+                    <!-- BETROTHAL VENUE -->
+                    <article class="venue-card group grid md:grid-cols-[0.34fr_0.66fr] bg-[#fffaf0]/92 border border-[#f6e8c8]/90 shadow-[0_12px_32px_rgba(91,63,37,0.10)] overflow-hidden transition-transform duration-500 hover:-translate-y-1">
+
+                        <div class="relative h-[155px] md:h-full min-h-[165px] overflow-hidden">
+                            <img src="https://media-cdn.tripadvisor.com/media/photo-m/1280/16/b1/3c/2b/st-francis-de-sales-catholic.jpg"
+                                alt="St. John's Forane Church, Parappukkara"
+                                class="w-full h-full object-cover transition duration-[2500ms] group-hover:scale-105"
+                                loading="lazy" decoding="async" width="640" height="480">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#3f2b1b]/45 via-[#3f2b1b]/10 to-transparent" aria-hidden="true"></div>
+                            <div class="absolute left-4 bottom-4">
+                                <p class="uppercase tracking-[5px] text-[8px] text-white/85 font-semibold">Betrothal</p>
+                            </div>
+                        </div>
+
+                        <div class="relative p-5 md:p-6 flex flex-col justify-center">
+                            <p class="uppercase tracking-[5px] text-[10px] text-[#7a552e] font-semibold mb-2">Betrothal Ceremony</p>
+                            <h3 class="text-[#5b3f25] text-[26px] sm:text-[30px] leading-[1.05] tracking-[-0.5px] mb-3">
+                                St. John's Forane Church, Parappukkara
+                            </h3>
+                            <p class="uppercase tracking-[3px] text-[10px] text-[#7a552e] font-semibold mb-4">
+                                Time: 3:30 PM IST
+                            </p>
+                            <div>
+                                <a href="https://maps.google.com/?q=St.+John%27s+Forane+Church+Parappukkara" target="_blank" rel="noopener noreferrer"
+                                    class="inline-flex items-center gap-3 border border-[#b68c45]/35 px-6 py-3 min-h-[44px] text-[#5b3f25] text-[10px] uppercase tracking-[4px] font-semibold hover:bg-[#5b3f25] hover:text-white hover:border-[#5b3f25] transition-colors duration-500"
+                                    aria-label="Get directions to St. John's Forane Church, Parappukkara (opens in a new tab)">
+                                    Get Directions
+                                    <i class="fa-solid fa-arrow-right text-[10px]" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- RECEPTION VENUE -->
+                    <article class="venue-card group grid md:grid-cols-[0.34fr_0.66fr] bg-[#fffaf0]/92 border border-[#f6e8c8]/90 shadow-[0_12px_32px_rgba(91,63,37,0.10)] overflow-hidden transition-transform duration-500 hover:-translate-y-1">
+
+                        <div class="relative h-[155px] md:h-full min-h-[165px] overflow-hidden">
+                            <img src="https://static.vecteezy.com/system/resources/thumbnails/072/283/685/small/elegant-banquet-hall-with-red-tablecloths-and-sparkling-lights-is-ready-photo.jpg"
+                                alt="St. Mary's Convention Centre, Nellayi"
+                                class="w-full h-full object-cover transition duration-[2500ms] group-hover:scale-105"
+                                loading="lazy" decoding="async" width="640" height="480">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#3f2b1b]/45 via-[#3f2b1b]/10 to-transparent" aria-hidden="true"></div>
+                            <div class="absolute left-4 bottom-4">
+                                <p class="uppercase tracking-[5px] text-[8px] text-white/85 font-semibold">Reception</p>
+                            </div>
+                        </div>
+
+                        <div class="relative p-5 md:p-6 flex flex-col justify-center">
+                            <p class="uppercase tracking-[5px] text-[10px] text-[#7a552e] font-semibold mb-2">Reception</p>
+                            <h3 class="text-[#5b3f25] text-[26px] sm:text-[30px] leading-[1.05] tracking-[-0.5px] mb-3">
+                                St. Mary's Convention Centre, Nellayi
+                            </h3>
+                            <p class="uppercase tracking-[3px] text-[10px] text-[#7a552e] font-semibold mb-4">
+                                Time: 6&ndash;9 PM IST
+                            </p>
+                            <div>
+                                <a href="https://maps.google.com/?q=St.+Mary%27s+Convention+Centre+Nellayi" target="_blank" rel="noopener noreferrer"
+                                    class="inline-flex items-center gap-3 border border-[#b68c45]/35 px-6 py-3 min-h-[44px] text-[#5b3f25] text-[10px] uppercase tracking-[4px] font-semibold hover:bg-[#5b3f25] hover:text-white hover:border-[#5b3f25] transition-colors duration-500"
+                                    aria-label="Get directions to St. Mary's Convention Centre, Nellayi (opens in a new tab)">
+                                    Get Directions
+                                    <i class="fa-solid fa-arrow-right text-[10px]" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             BLESSING
+        ============================================================= -->
+        <section id="blessing" class="relative py-20 sm:py-24 px-5 overflow-hidden bg-[#fff8e9]">
+
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_#fffdf7_0%,_#f4ead2_58%,_#dcc08b_100%)]" aria-hidden="true"></div>
+            <div class="absolute -top-32 -left-32 w-[420px] h-[420px] rounded-full bg-[#d4b06a]/15 blur-[140px]" aria-hidden="true"></div>
+            <div class="absolute -bottom-32 -right-32 w-[420px] h-[420px] rounded-full bg-[#7f8d71]/10 blur-[140px]" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-6xl mx-auto">
+
+                <div class="text-center mb-14 sm:mb-16">
+                    <div class="flex items-center justify-center gap-4 mb-5">
+                        <span class="w-14 h-[1px] bg-[#b68c45]/40" aria-hidden="true"></span>
+                        <p class="uppercase tracking-[8px] text-[10px] text-[#7a552e] font-semibold">A Sacred Promise</p>
+                        <span class="w-14 h-[1px] bg-[#b68c45]/40" aria-hidden="true"></span>
+                    </div>
+
+                    <h2 class="elegant-font text-[#5b3f25] text-[clamp(2.6rem,8vw,4.75rem)] leading-[0.88]">
+                        Every Promise
+                        <span class="block italic text-[#b68c45]">Begins With Faith</span>
+                    </h2>
+                </div>
+
+                <div class="grid lg:grid-cols-[1.2fr_0.8fr] gap-10 items-center">
+
+                    <div class="bg-[#fffdf8]/75 backdrop-blur-xl border border-[#e8d7b2]/60 p-7 sm:p-10 shadow-[0_25px_70px_rgba(91,63,37,.08)]">
+                        <p class="uppercase tracking-[5px] text-[9px] text-[#b68c45] font-semibold mb-8">Betrothal Blessing</p>
+                        <p class="elegant-font text-[#5b3f25] text-[clamp(1.8rem,5vw,2.75rem)] leading-[1.15]">
+                            &ldquo;Two hearts, guided by God's grace, preparing to become one beautiful promise.&rdquo;
+                        </p>
+                        <div class="w-16 h-[1px] bg-[#b68c45]/30 my-10" aria-hidden="true"></div>
+                        <p class="text-[#5d4a36] leading-8 max-w-xl">
+                            With grateful hearts and the blessings of our families, we prepare to begin a beautiful chapter filled with faith, love, hope, and lifelong companionship.
+                        </p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-[#fffaf0] border border-[#e8d7b2]/60 p-7">
+                            <p class="uppercase tracking-[4px] text-[8px] text-[#b68c45] mb-3">Faith</p>
+                            <h3 class="elegant-font text-[#5b3f25] text-3xl">Guided By Grace</h3>
+                        </div>
+                        <div class="bg-[#fffaf0] border border-[#e8d7b2]/60 p-7">
+                            <p class="uppercase tracking-[4px] text-[8px] text-[#b68c45] mb-3">Family</p>
+                            <h3 class="elegant-font text-[#5b3f25] text-3xl">Blessed Together</h3>
+                        </div>
+                        <div class="bg-[#fffaf0] border border-[#e8d7b2]/60 p-7">
+                            <p class="uppercase tracking-[4px] text-[8px] text-[#b68c45] mb-3">Love</p>
+                            <h3 class="elegant-font text-[#5b3f25] text-3xl">A Promise Awaits</h3>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <footer class="py-10 bg-[#fff8e9]">
+            <div class="max-w-xl mx-auto text-center px-5">
+                <i class="fa-solid fa-ring text-[#b68c45] text-sm mb-6" aria-hidden="true"></i>
+                <p class="elegant-font text-[#5b3f25] text-3xl">Edwin &amp; Ann Mariya</p>
+                <div class="w-16 h-[1px] bg-[#b68c45]/30 mx-auto my-5" aria-hidden="true"></div>
+                <p class="uppercase tracking-[5px] text-[9px] text-[#8b6f43]">Thank You For Your Love &amp; Blessings</p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script src="./script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,527 @@
+/* =====================================================================
+   1. RESET & BASE
+===================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: inherit;
+    background: none;
+}
+
+section {
+    position: relative;
+}
+
+/* =====================================================================
+   2. ROOT VARIABLES — PREMIUM IVORY & GOLD SYSTEM
+===================================================================== */
+:root {
+    /* Backgrounds */
+    --bg-main: #fffaf0;
+    --bg-secondary: #fff8e9;
+    --bg-card: #fffdf8;
+
+    /* Text */
+    --text-dark: #5b3f25;
+    --text-body: #5d4a36;
+    --text-muted: #6f5a3f;
+
+    /* Gold palette */
+    --gold-primary: #b68c45;
+    --gold-secondary: #d8b46c;
+    --gold-border: rgba(182, 140, 69, 0.35);
+
+    /* Shadows */
+    --shadow-soft: 0 12px 32px rgba(91, 63, 37, 0.10);
+    --shadow-strong: 0 32px 80px rgba(91, 63, 37, 0.18);
+
+    /* Layout */
+    --section-spacing: clamp(3rem, 8vw, 6rem);
+    --card-radius: 0px; /* the design intentionally uses sharp editorial corners */
+    --content-width: 1100px;
+
+    /* Motion */
+    --transition-duration: 0.5s;
+    --ease-standard: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-main);
+    color: var(--text-body);
+    overflow-x: hidden;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at top left, rgba(216, 180, 108, 0.14), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(217, 170, 116, 0.12), transparent 35%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Cormorant Garamond', serif;
+}
+
+/* =====================================================================
+   3. TYPOGRAPHY
+===================================================================== */
+.elegant-font {
+    font-family: 'Allura', cursive;
+    font-weight: 500;
+}
+
+#websiteContent {
+    opacity: 0;
+}
+
+/* =====================================================================
+   4. ACCESSIBILITY & FOCUS
+===================================================================== */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--gold-primary);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+/* =====================================================================
+   5. INTRO
+===================================================================== */
+/* INTRO SVG RINGS */
+
+.svg-ring {
+    position: absolute;
+    width: 88px;
+    height: 88px;
+    overflow: visible;
+    opacity: 0;
+    background: transparent !important;
+    border: 0 !important;
+    outline: 0 !important;
+    transform-origin: center;
+    filter:
+        drop-shadow(0 8px 12px rgba(122, 85, 46, 0.14))
+        drop-shadow(0 16px 24px rgba(216, 180, 108, 0.12));
+}
+
+.ring-left {
+    transform: translateX(-125px) rotate(-15deg) scale(0.85);
+}
+
+.ring-right {
+    transform: translateX(125px) rotate(15deg) scale(0.85);
+}
+
+/* Remove any older square backgrounds or pseudo-elements */
+
+.svg-ring::before,
+.svg-ring::after,
+.ring-left::before,
+.ring-left::after,
+.ring-right::before,
+.ring-right::after {
+    content: none !important;
+    display: none !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+@media (min-width: 640px) {
+    .svg-ring {
+        width: 106px;
+        height: 106px;
+    }
+
+    .ring-left {
+        transform: translateX(-155px) rotate(-15deg) scale(0.85);
+    }
+
+    .ring-right {
+        transform: translateX(155px) rotate(15deg) scale(0.85);
+    }
+}
+
+@media (min-width: 768px) {
+    .svg-ring {
+        width: 118px;
+        height: 118px;
+    }
+
+    .ring-left {
+        transform: translateX(-175px) rotate(-15deg) scale(0.85);
+    }
+
+    .ring-right {
+        transform: translateX(175px) rotate(15deg) scale(0.85);
+    }
+}
+
+/* Gold drifting particles behind the intro text (minimal, decorative) */
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #c9a86a;
+    box-shadow: 0 0 12px rgba(201, 168, 106, 0.7);
+    opacity: 0;
+    animation: particleDrift 9s ease-in-out infinite;
+}
+
+.particle:nth-child(1) { top: 20%; left: 12%; animation-delay: 0s; }
+.particle:nth-child(2) { top: 65%; left: 20%; animation-delay: 1.5s; }
+.particle:nth-child(3) { top: 30%; left: 85%; animation-delay: 3s; }
+.particle:nth-child(4) { top: 75%; left: 80%; animation-delay: 4.5s; }
+.particle:nth-child(5) { top: 50%; left: 50%; animation-delay: 6s; }
+
+@keyframes particleDrift {
+    0%   { opacity: 0; transform: translateY(0); }
+    15%  { opacity: 0.8; }
+    85%  { opacity: 0.5; }
+    100% { opacity: 0; transform: translateY(-60px); }
+}
+
+/* =====================================================================
+   6. MUSIC BUTTON
+===================================================================== */
+.music-btn {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(145deg, #fffaf0, #f4e4c4);
+    color: var(--text-dark);
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: transform var(--transition-duration) var(--ease-standard), box-shadow var(--transition-duration) var(--ease-standard);
+    box-shadow: 0 10px 26px rgba(91, 63, 37, 0.16);
+    border: 1px solid rgba(182, 140, 69, 0.3);
+}
+
+.music-btn:hover {
+    transform: translateY(-2px);
+}
+
+.music-btn:active {
+    transform: scale(0.94);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .music-btn:hover { transform: none; }
+}
+
+/* =====================================================================
+   7. HERO
+===================================================================== */
+/* Hero-specific rules live inline via Tailwind utilities; nothing
+   additional required here beyond the shared card/shadow system. */
+
+/* =====================================================================
+   8. PROMISE SECTION
+===================================================================== */
+/* Handled via Tailwind utilities in markup. */
+
+/* =====================================================================
+   9. SAVE-THE-DATE / PETAL REVEAL
+===================================================================== */
+#petalRevealCard {
+    touch-action: none;
+}
+
+#petalField {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+}
+
+.mini-petal {
+    position: absolute;
+    width: 34px;
+    height: 46px;
+    border-radius: 80% 20% 80% 20%;
+    background:
+        radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.95), transparent 35%),
+        linear-gradient(145deg, #fdf6ea, #e9cd94);
+    box-shadow:
+        4px 4px 12px rgba(91, 63, 37, 0.16),
+        -3px -3px 8px rgba(255, 255, 255, 0.8);
+    transform-origin: center;
+    will-change: transform, opacity;
+}
+
+.mini-petal.touched {
+    pointer-events: none;
+}
+
+@media (max-width: 480px) {
+    .mini-petal { width: 30px; height: 40px; }
+}
+
+#petalHint.hint-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* =====================================================================
+   10. COUNTDOWN
+===================================================================== */
+.count-box {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 24px;
+    padding: clamp(1rem, 3vw, 2.25rem) clamp(0.75rem, 2vw, 1.5rem);
+    box-shadow: 0 10px 26px rgba(91, 63, 37, 0.10);
+}
+
+.count-icon {
+    width: clamp(48px, 8vw, 96px);
+    height: clamp(48px, 8vw, 96px);
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    box-shadow: inset 4px 4px 12px rgba(91, 63, 37, 0.06), inset -4px -4px 12px rgba(255, 255, 255, 0.8);
+    font-size: clamp(1rem, 3vw, 1.5rem);
+}
+
+.count-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: clamp(2rem, 7vw, 4.25rem);
+    line-height: 1;
+    color: var(--text-dark);
+    font-variant-numeric: tabular-nums;
+}
+
+/* =====================================================================
+   11. VENUE
+===================================================================== */
+/* Handled via Tailwind utilities in markup. */
+
+/* =====================================================================
+   12. ADDITIONAL CONTENT / BLESSING
+===================================================================== */
+/* Handled via Tailwind utilities in markup. */
+
+/* =====================================================================
+   13. FOOTER
+===================================================================== */
+/* Handled via Tailwind utilities in markup. */
+
+/* =====================================================================
+   14. CUSTOM CURSOR (desktop, fine-pointer only)
+===================================================================== */
+#custom-cursor,
+#cursor-follower {
+    display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    body.has-fine-pointer #custom-cursor {
+        display: block;
+        width: 10px;
+        height: 10px;
+        background: var(--gold-primary);
+        border-radius: 50%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 99999;
+        mix-blend-mode: multiply;
+    }
+
+    body.has-fine-pointer #cursor-follower {
+        display: block;
+        width: 38px;
+        height: 38px;
+        border: 1.5px solid rgba(182, 140, 69, 0.5);
+        border-radius: 50%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 99998;
+    }
+}
+
+/* =====================================================================
+   15. SCROLL PROGRESS
+===================================================================== */
+.progress-round {
+    background: var(--bg-card);
+    border-radius: 999px;
+    box-shadow: 0 0 20px rgba(182, 140, 69, 0.16), inset 2px 2px 8px rgba(255, 255, 255, 0.8);
+}
+
+/* =====================================================================
+   16. LUXURY FLOWERS (brief celebratory transition)
+===================================================================== */
+#flowerContainer {
+    perspective: 1200px;
+}
+
+.flower {
+    position: absolute;
+    top: -120px;
+    will-change: transform, opacity;
+    pointer-events: none;
+    user-select: none;
+    backface-visibility: hidden;
+    filter: drop-shadow(0 8px 20px rgba(182, 140, 69, 0.18));
+}
+
+.flower.depth-far {
+    opacity: 0.35;
+    filter: blur(2px) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.1));
+}
+
+.flower.depth-mid {
+    opacity: 0.6;
+    filter: blur(1px) drop-shadow(0 8px 20px rgba(0, 0, 0, 0.12));
+}
+
+.flower.depth-near {
+    opacity: 1;
+}
+
+.flower-glow {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0));
+    pointer-events: none;
+    filter: blur(2px);
+    opacity: 0.7;
+    will-change: transform, opacity;
+}
+
+/* =====================================================================
+   17. FLOATING ANIMATION (used sparingly, on a few icons)
+===================================================================== */
+.floating {
+    animation: floating 5s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* =====================================================================
+   18. SCROLLBAR
+===================================================================== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--gold-secondary), var(--gold-primary));
+    border-radius: 999px;
+}
+
+/* =====================================================================
+   19. RESPONSIVE ADJUSTMENTS
+===================================================================== */
+@media (max-width: 768px) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    body::before {
+        opacity: 0.55;
+    }
+
+    #flowerGlow {
+        display: none;
+    }
+
+    #flowerContainer {
+        opacity: 0.5;
+    }
+
+    .flower {
+        filter: none;
+        opacity: 0.5;
+    }
+
+    .flower.depth-far,
+    .flower.depth-mid,
+    .flower.depth-near {
+        filter: none;
+        opacity: 0.5;
+    }
+
+    .music-btn {
+        box-shadow: 0 8px 18px rgba(91, 63, 37, 0.14);
+    }
+
+    .count-box:hover,
+    .venue-card:hover {
+        transform: none;
+    }
+}
+
+@media (max-width: 380px) {
+    .count-number {
+        font-size: clamp(1.6rem, 8vw, 2.2rem);
+    }
+}
+
+/* =====================================================================
+   20. REDUCED MOTION
+===================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+}
