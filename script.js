@@ -1,7 +1,7 @@
 /* =====================================================================
    CONFIGURATION & CONSTANTS
 ===================================================================== */
-const BETROTHAL_DATE_ISO = "2026-10-21T15:00:00+05:30"; // Wednesday, 21 Oct 2026, 3:00 PM IST
+const BETROTHAL_DATE_ISO = "2026-10-21T15:30:00+05:30"; // Wednesday, 21 Oct 2026, 3:00 PM IST
 const BETROTHAL_TIMESTAMP = new Date(BETROTHAL_DATE_ISO).getTime();
 
 const isMobile = window.innerWidth < 768;
