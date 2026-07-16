@@ -525,3 +525,31 @@ button:focus-visible,
         scroll-behavior: auto;
     }
 }
+
+
+
+
+/* Promote animated elements to the GPU layer */
+.hero-stagger, .svg-ring, #hero-card-reveal, .story-image, .story-content {
+    will-change: transform, opacity;
+}
+
+/* Responsive Adjustments for Performance */
+@media (max-width: 768px) {
+    /* Disable expensive filter effects */
+    .svg-ring, .hero-stagger, #hero-card-reveal img {
+        filter: none !important;
+        box-shadow: none !important;
+    }
+    
+    /* Remove backdrop-filter which causes severe lag on mobile Safari/Chrome */
+    #countdownCelebration {
+        backdrop-filter: none !important;
+        background-color: #f4ead8 !important; 
+    }
+
+    /* Disable hover-based transforms that cause layout shifts */
+    .count-box:hover, .venue-card:hover, .music-btn:hover {
+        transform: none !important;
+    }
+}

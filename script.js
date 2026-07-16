@@ -76,7 +76,12 @@ dom.body.style.overflow = "hidden";
 ===================================================================== */
 function initCustomCursor() {
     if (!dom.cursor || !dom.follower) return;
-    if (isMobile || prefersReducedMotion || !hasFinePointer) return;
+    // Disable on mobile devices/touch devices entirely
+    if (window.innerWidth < 1024 || prefersReducedMotion || !hasFinePointer) {
+        dom.cursor.style.display = 'none';
+        dom.follower.style.display = 'none';
+        return;
+    }
 
     dom.body.classList.add("has-fine-pointer");
 
@@ -294,16 +299,19 @@ const HeroController = (() => {
 function initScrollReveals() {
     if (!gsapAvailable || typeof ScrollTrigger === "undefined") return;
 
-    const revealDistance = prefersReducedMotion ? 0 : (isMobile ? 40 : 100);
-    const revealDuration = prefersReducedMotion ? 0.01 : 1.1;
+    const isMobile = window.innerWidth < 768;
+    const revealDuration = isMobile ? 0.5 : 1.1;
 
     gsap.utils.toArray(".story-image").forEach((el) => {
         gsap.from(el, {
-            x: isMobile ? 0 : -revealDistance,
-            y: isMobile ? 30 : 0,
-            opacity: 0,
+            y: isMobile ? 20 : 0, 
+            opacity: 0, 
             duration: revealDuration,
-            scrollTrigger: { trigger: el, start: "top 82%" },
+            scrollTrigger: { 
+                trigger: el, 
+                start: "top 85%",
+                toggleActions: "play none none none" // Only run once
+            },
         });
     });
 
