@@ -297,13 +297,28 @@ const HeroController = (() => {
         tl.fromTo(card,
             { scale: 1.08, y: 60, opacity: 0 },
             { scale: 1, y: 0, opacity: 1, duration: 1.1, ease: "power3.out", clearProps: "transform" }
-        )
-        .fromTo(card.querySelector("img"),
-            { scale: 1.15, filter: "blur(8px)" },
-            { scale: 1.02, filter: "blur(0px)", duration: 1.1, ease: "power3.out" },
-            "-=0.9"
-        )
-        .from(".hero-stagger", { y: 40, opacity: 0, stagger: 0.1, duration: 0.9, ease: "power4.out", clearProps: "transform" }, "-=0.9");
+        );
+
+        // Animating filter:blur forces the browser to re-rasterize the
+        // full image on every tick — one of the most expensive things to
+        // animate, right as the very first thing the user sees post-
+        // intro. Mobile gets the scale-only reveal (still a nice zoom
+        // settle); desktop keeps the extra blur-focus polish.
+        if (isMobile) {
+            tl.fromTo(card.querySelector("img"),
+                { scale: 1.15 },
+                { scale: 1.02, duration: 1.1, ease: "power3.out" },
+                "-=0.9"
+            );
+        } else {
+            tl.fromTo(card.querySelector("img"),
+                { scale: 1.15, filter: "blur(8px)" },
+                { scale: 1.02, filter: "blur(0px)", duration: 1.1, ease: "power3.out" },
+                "-=0.9"
+            );
+        }
+
+        tl.from(".hero-stagger", { y: 40, opacity: 0, stagger: 0.1, duration: 0.9, ease: "power4.out", clearProps: "transform" }, "-=0.9");
     }
 
     return { animate };
@@ -769,7 +784,9 @@ const PetalController = (() => {
         totalPetals = isSmallMobile ? 30 : (isMobile ? (isLowEndDevice ? 40 : 55) : 110);
 
         if (gsapAvailable) {
-            gsap.set(dom.saveDateContent, { opacity: 0, scale: 0.92, filter: "blur(8px)" });
+            gsap.set(dom.saveDateContent, isMobile
+                ? { opacity: 0, scale: 0.92 }
+                : { opacity: 0, scale: 0.92, filter: "blur(8px)" });
         }
 
         const fragment = document.createDocumentFragment();
@@ -864,7 +881,9 @@ const PetalController = (() => {
                 onComplete: () => { if (dom.petalLayer) dom.petalLayer.style.display = "none"; },
             });
 
-            gsap.to(dom.saveDateContent, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1, ease: "power3.out" });
+            gsap.to(dom.saveDateContent, isMobile
+                ? { opacity: 1, scale: 1, duration: 1, ease: "power3.out" }
+                : { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1, ease: "power3.out" });
 
             gsap.to(dom.countdownSection, {
                 opacity: 1, y: 0, duration: 1.1, delay: 1, ease: "power4.out",

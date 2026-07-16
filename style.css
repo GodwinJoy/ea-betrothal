@@ -33,6 +33,22 @@ section {
     contain: layout style paint;
 }
 
+/* Skip layout/paint/rendering for sections that are still off-screen —
+   the browser only does the work once they're near the viewport. This
+   is the single biggest lever for scroll-time cost on a long page: it
+   stops every below-the-fold section from being kept fully painted and
+   composited while the user is still scrolling through the hero.
+   `auto <height>` means the estimate is only used for the very first
+   layout — the browser remembers the real rendered height afterwards,
+   so there's no layout jump once each section has been measured once. */
+#promise,
+#save-the-date,
+#venue,
+#blessing {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+}
+
 /* =====================================================================
    2. ROOT VARIABLES — PREMIUM IVORY & GOLD SYSTEM
 ===================================================================== */
@@ -514,21 +530,20 @@ button:focus-visible,
        of the compositing cost. Targets Tailwind's arbitrary-value
        classes directly so no markup changes are needed. */
     [class*="blur-["] {
-        filter: blur(26px) !important;
+        filter: blur(22px) !important;
     }
 
+    /* backdrop-filter is dropped entirely on mobile rather than just
+       capped: unlike a static filter:blur(), backdrop-filter has to
+       keep re-sampling whatever is scrolling underneath it every frame
+       it's on screen — it's the single worst property for scroll jank
+       on mid-range Android GPUs. Both elements that use it already sit
+       on a 75–95% opaque background, so dropping just the "frosted
+       glass" sampling keeps the look almost identical while removing
+       the scroll cost completely. */
     .backdrop-blur-xl {
-        -webkit-backdrop-filter: blur(10px) !important;
-        backdrop-filter: blur(10px) !important;
-    }
-
-    /* Decorative full-bleed radial gradients repaint on every scroll on
-       some Android WebViews when layered with blur siblings; promoting
-       them to their own compositor layer avoids that repaint cascade
-       without changing how they look. */
-    section > .absolute[class*="rounded-full"][class*="blur-"] {
-        will-change: transform;
-        transform: translateZ(0);
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
     }
 }
 
