@@ -876,8 +876,7 @@ const PetalController = (() => {
 
         if (revealDone) return;
         revealDone = true;
-        document.body.style.overflow = "";
-document.documentElement.style.overflow = "";
+       document.body.classList.remove("scratching");
         // Re-enable normal page scrolling
     
 
@@ -970,7 +969,7 @@ document.documentElement.style.overflow = "";
     if (!revealDone) {
 
         document.body.style.overflow = "";
-        document.documentElement.style.overflow = "";
+document.documentElement.style.overflow = "";
 
     }
 
@@ -982,8 +981,7 @@ dom.petalCard.addEventListener("pointercancel", () => {
 
     if (!revealDone) {
 
-        document.body.style.overflow = "";
-        document.documentElement.style.overflow = "";
+        document.body.classList.remove("scratching");
 
     }
 
@@ -996,8 +994,13 @@ dom.petalCard.addEventListener("pointercancel", () => {
         }, { passive: true });
 
         dom.petalCard.addEventListener("pointerdown", (e) => {
-            handleMove(e.clientX, e.clientY, 55);
-        }, { passive: true });
+    if (e.pointerType === "touch") {
+        touchActive = true;
+       document.body.classList.add("scratching");
+    }
+
+    handleMove(e.clientX, e.clientY, 55);
+}, { passive: true });
 
         // Rects only need recomputing if the card's on-page position could
         // have changed (scroll/orientation change) — not on every touch.

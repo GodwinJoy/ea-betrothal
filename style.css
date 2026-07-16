@@ -283,7 +283,7 @@ button:focus-visible,
    9. SAVE-THE-DATE / PETAL REVEAL
 ===================================================================== */
 #petalRevealCard {
-    touch-action: auto;
+    touch-action: none;
 }
 
 #petalField {
@@ -588,4 +588,9 @@ button:focus-visible,
     [class*="blur-["] {
         filter: none !important;
     }
+}
+body.scratching {
+    overflow: hidden;
+    touch-action: none;
+    overscroll-behavior: none;
 }
