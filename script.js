@@ -791,7 +791,7 @@ const PetalController = (() => {
         if (gsapAvailable) {
             gsap.set(dom.saveDateContent, isMobile
                 ? { opacity: 0, scale: 0.92 }
-                : { opacity: 0, scale: 0.92, filter: "blur(8px)" });
+                : { opacity: 0, scale: 0.92 });
         }
 
         const fragment = document.createDocumentFragment();
