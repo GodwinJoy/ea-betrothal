@@ -876,6 +876,13 @@ const PetalController = (() => {
         if (revealDone) return;
         revealDone = true;
 
+        // Re-enable normal page scrolling
+    dom.petalCard.style.touchAction = "auto";
+
+    // Don't allow any more interaction with the petal layer
+    if (dom.petalLayer) {
+        dom.petalLayer.style.pointerEvents = "none";
+    }
         const remaining = livePetals.slice();
         livePetals = [];
 
@@ -883,7 +890,12 @@ const PetalController = (() => {
             gsap.to(".mini-petal", {
                 scale: 0, opacity: 0, y: "-=60", rotate: "+=180",
                 stagger: 0.006, duration: 0.5, ease: "power3.in",
-                onComplete: () => { if (dom.petalLayer) dom.petalLayer.style.display = "none"; },
+                ooComplete: () => {
+    if (dom.petalLayer) {
+        dom.petalLayer.style.pointerEvents = "none";
+        dom.petalLayer.style.display = "none";
+    }
+},
             });
 
             gsap.to(dom.saveDateContent, isMobile
@@ -948,12 +960,28 @@ const PetalController = (() => {
         }
 
         dom.petalCard.addEventListener("pointerdown", () => {
-            touchActive = true;
-            rectsDirty = true; // card may have settled into place since layout; refresh once.
-        }, { passive: true });
+    touchActive = true;
+    rectsDirty = true;
 
-        dom.petalCard.addEventListener("pointerup", () => { touchActive = false; }, { passive: true });
-        dom.petalCard.addEventListener("pointercancel", () => { touchActive = false; }, { passive: true });
+    // Prevent page scrolling while scratching petals
+    dom.petalCard.style.touchAction = "none";
+}, { passive: true });
+
+        dom.petalCard.addEventListener("pointerup", () => {
+    touchActive = false;
+
+    if (!revealDone) {
+        dom.petalCard.style.touchAction = "auto";
+    }
+}, { passive: true });
+
+dom.petalCard.addEventListener("pointercancel", () => {
+    touchActive = false;
+
+    if (!revealDone) {
+        dom.petalCard.style.touchAction = "auto";
+    }
+}, { passive: true });
 
         dom.petalCard.addEventListener("pointermove", (e) => {
             const radius = e.pointerType === "touch" ? 50 : 42;
