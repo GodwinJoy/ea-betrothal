@@ -873,10 +873,7 @@ const PetalController = (() => {
     }
 
     function finish() {
-        if (rafId !== null) {
-    cancelAnimationFrame(rafId);
-    rafId = null;
-}
+
         if (revealDone) return;
         revealDone = true;
         document.body.style.overflow = "";
