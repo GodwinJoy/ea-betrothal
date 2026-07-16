@@ -875,9 +875,10 @@ const PetalController = (() => {
     function finish() {
         if (revealDone) return;
         revealDone = true;
-
+        document.body.style.overflow = "";
+document.documentElement.style.overflow = "";
         // Re-enable normal page scrolling
-    dom.petalCard.style.touchAction = "auto";
+    
 
     // Don't allow any more interaction with the petal layer
     if (dom.petalLayer) {
@@ -959,28 +960,47 @@ const PetalController = (() => {
             }
         }
 
-        dom.petalCard.addEventListener("pointerdown", () => {
+       dom.petalCard.addEventListener("pointerdown", (e) => {
+
     touchActive = true;
     rectsDirty = true;
 
-    // Prevent page scrolling while scratching petals
-    dom.petalCard.style.touchAction = "none";
+    if (e.pointerType === "touch") {
+
+        // lock page scrolling
+        document.body.style.overflow = "hidden";
+        document.documentElement.style.overflow = "hidden";
+
+    }
+
+    handleMove(e.clientX, e.clientY, 55);
+
 }, { passive: true });
 
-        dom.petalCard.addEventListener("pointerup", () => {
+       dom.petalCard.addEventListener("pointerup", () => {
+
     touchActive = false;
 
     if (!revealDone) {
-        dom.petalCard.style.touchAction = "auto";
+
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+
     }
+
 }, { passive: true });
 
 dom.petalCard.addEventListener("pointercancel", () => {
+
     touchActive = false;
 
     if (!revealDone) {
-        dom.petalCard.style.touchAction = "auto";
+
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+
     }
+
 }, { passive: true });
 
         dom.petalCard.addEventListener("pointermove", (e) => {
