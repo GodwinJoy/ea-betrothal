@@ -876,7 +876,7 @@ const PetalController = (() => {
 
         if (revealDone) return;
         revealDone = true;
-       document.body.classList.remove("scratching");
+       
         // Re-enable normal page scrolling
     
 
@@ -946,12 +946,18 @@ const PetalController = (() => {
         let rafId = null;
 
         function flushMove() {
-            rafId = null;
-            if (!pendingMove) return;
-            const { x, y, radius } = pendingMove;
-            pendingMove = null;
-            handleMove(x, y, radius);
-        }
+    rafId = null;
+
+    if (!pendingMove) return;
+
+    handleMove(
+        pendingMove.x,
+        pendingMove.y,
+        pendingMove.radius
+    );
+
+    pendingMove = null;
+}
 
         function queueMove(x, y, radius) {
             pendingMove = { x, y, radius };
@@ -960,52 +966,55 @@ const PetalController = (() => {
             }
         }
 
-       
+       dom.petalCard.addEventListener("pointerdown", (e) => {
 
-       dom.petalCard.addEventListener("pointerup", () => {
+    if (e.pointerType === "touch") {
+
+        touchActive = true;
+
+        // Prevent scrolling ONLY for this touch
+        e.preventDefault();
+    }
+
+    handleMove(e.clientX, e.clientY, 55);
+
+});
+
+dom.petalCard.addEventListener("pointermove", (e) => {
+
+    if (e.pointerType === "touch") {
+
+        if (!touchActive) return;
+
+        e.preventDefault();
+    }
+
+    queueMove(
+        e.clientX,
+        e.clientY,
+        e.pointerType === "touch" ? 50 : 42
+    );
+
+});
+
+dom.petalCard.addEventListener("pointerup", () => {
 
     touchActive = false;
 
-    if (!revealDone) {
-
-        document.body.style.overflow = "";
-document.documentElement.style.overflow = "";
-
-    }
-
-}, { passive: true });
+});
 
 dom.petalCard.addEventListener("pointercancel", () => {
 
     touchActive = false;
 
-    if (!revealDone) {
+});
 
-        document.body.classList.remove("scratching");
-
-    }
-
-}, { passive: true });
-
-        dom.petalCard.addEventListener("pointermove", (e) => {
-            const radius = e.pointerType === "touch" ? 50 : 42;
-            if (e.pointerType === "touch" && !touchActive) return;
-            queueMove(e.clientX, e.clientY, radius);
-        }, { passive: true });
-
-        dom.petalCard.addEventListener("pointerdown", (e) => {
-    if (e.pointerType === "touch") {
-        touchActive = true;
-       document.body.classList.add("scratching");
-    }
-
-    handleMove(e.clientX, e.clientY, 55);
-}, { passive: true });
+       
 
         // Rects only need recomputing if the card's on-page position could
         // have changed (scroll/orientation change) — not on every touch.
-        window.addEventListener("scroll", () => { rectsDirty = true; }, { passive: true });
-        window.addEventListener("resize", () => { rectsDirty = true; }, { passive: true });
+        window.addEventListener("scroll", () => { rectsDirty = true; }, { passive: false });
+        window.addEventListener("resize", () => { rectsDirty = true; }, { passive: false });
 
         // Keyboard / accessible fallback — always available, never leaves the date hidden.
         if (dom.petalFallbackBtn) {
