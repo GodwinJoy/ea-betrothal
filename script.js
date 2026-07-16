@@ -873,6 +873,10 @@ const PetalController = (() => {
     }
 
     function finish() {
+        if (rafId !== null) {
+    cancelAnimationFrame(rafId);
+    rafId = null;
+}
         if (revealDone) return;
         revealDone = true;
         document.body.style.overflow = "";
@@ -891,7 +895,7 @@ document.documentElement.style.overflow = "";
             gsap.to(".mini-petal", {
                 scale: 0, opacity: 0, y: "-=60", rotate: "+=180",
                 stagger: 0.006, duration: 0.5, ease: "power3.in",
-                ooComplete: () => {
+                onComplete: () => {
     if (dom.petalLayer) {
         dom.petalLayer.style.pointerEvents = "none";
         dom.petalLayer.style.display = "none";
@@ -960,22 +964,7 @@ document.documentElement.style.overflow = "";
             }
         }
 
-       dom.petalCard.addEventListener("pointerdown", (e) => {
-
-    touchActive = true;
-    rectsDirty = true;
-
-    if (e.pointerType === "touch") {
-
-        // lock page scrolling
-        document.body.style.overflow = "hidden";
-        document.documentElement.style.overflow = "hidden";
-
-    }
-
-    handleMove(e.clientX, e.clientY, 55);
-
-}, { passive: true });
+       
 
        dom.petalCard.addEventListener("pointerup", () => {
 
