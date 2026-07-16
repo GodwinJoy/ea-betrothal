@@ -7,20 +7,40 @@
     <meta name="description" content="Join Edwin and Ann Mariya as they celebrate their Betrothal Ceremony on Wednesday, 21 October 2026 at 3:00 PM. A sacred promise, blessed by God and family.">
     <meta name="theme-color" content="#f3ead8">
 
+    <!-- CONNECTION WARM-UP for every third-party origin actually used
+         below, so the TLS/DNS handshake overlaps with HTML parsing
+         instead of happening serially when each resource is discovered. -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://media-cdn.tripadvisor.com">
+    <link rel="preconnect" href="https://static.vecteezy.com">
+
+    <!-- LCP IMAGE: the hero portrait is the largest above-the-fold
+         element once the intro is dismissed; preloading it lets the
+         browser fetch it in parallel with GSAP/Tailwind instead of only
+         discovering it once the parser reaches line ~500. -->
+    <link rel="preload" as="image" href="./medias/couple.png" fetchpriority="high">
+
     <!-- TAILWIND -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- GOOGLE FONTS: Allura (script), Cormorant Garamond (serif display), Poppins (sans-serif body) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <!-- FONT AWESOME (decorative icons) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- FONT AWESOME (decorative icons, not needed for first paint) —
+         loaded as a non-render-blocking stylesheet via the preload+swap
+         pattern so it no longer delays First Contentful Paint. -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"></noscript>
 
-    <!-- GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- GSAP: deferred so the parser isn't blocked fetching/executing it;
+         `defer` preserves document order (both run, in order, before
+         DOMContentLoaded) so script.js can still rely on `gsap` and
+         `ScrollTrigger` being defined by the time it runs. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 
     <!-- FAVICON -->
     <link rel="icon" type="image/png" href="./medias/couple.png">

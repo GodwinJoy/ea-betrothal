@@ -9,9 +9,25 @@ const isSmallMobile = window.innerWidth < 480;
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const hasFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
+// Low-end / constrained-network detection — used to further scale back
+// decorative particle counts on top of the isMobile breakpoint, since a
+// narrow viewport alone doesn't tell us whether the device is a
+// mid/low-tier Android with a weak GPU.
+const saveData = Boolean(navigator.connection && navigator.connection.saveData);
+const isLowEndDevice = saveData
+    || (typeof navigator.deviceMemory === "number" && navigator.deviceMemory <= 4)
+    || (typeof navigator.hardwareConcurrency === "number" && navigator.hardwareConcurrency <= 4);
+
+if (saveData) {
+    document.documentElement.classList.add("save-data");
+}
+
 const gsapAvailable = typeof gsap !== "undefined";
 if (gsapAvailable && typeof ScrollTrigger !== "undefined") {
     gsap.registerPlugin(ScrollTrigger);
+    // Fewer forced full-page recalculations; we don't rely on rapid
+    // in-between refreshes anywhere in this codebase.
+    ScrollTrigger.config({ ignoreMobileResize: true });
 }
 
 /* =====================================================================
@@ -76,12 +92,7 @@ dom.body.style.overflow = "hidden";
 ===================================================================== */
 function initCustomCursor() {
     if (!dom.cursor || !dom.follower) return;
-    // Disable on mobile devices/touch devices entirely
-    if (window.innerWidth < 1024 || prefersReducedMotion || !hasFinePointer) {
-        dom.cursor.style.display = 'none';
-        dom.follower.style.display = 'none';
-        return;
-    }
+    if (isMobile || prefersReducedMotion || !hasFinePointer) return;
 
     dom.body.classList.add("has-fine-pointer");
 
@@ -203,7 +214,11 @@ function initIntroAnimation() {
         .to("#enterWebsite", { opacity: 1, y: 0, duration: 0.65 }, "-=0.3");
 }
 
+let introDismissed = false;
 function dismissIntro() {
+    if (introDismissed) return;
+    introDismissed = true;
+
     FlowerController.start();
     if (!MusicController.isPlaying()) MusicController.play();
 
@@ -220,6 +235,7 @@ function dismissIntro() {
 
         HeroController.animate();
         VenueController.animate();
+        PetalController.init();
     };
 
     if (gsapAvailable) {
@@ -280,14 +296,14 @@ const HeroController = (() => {
         const tl = gsap.timeline();
         tl.fromTo(card,
             { scale: 1.08, y: 60, opacity: 0 },
-            { scale: 1, y: 0, opacity: 1, duration: 1.1, ease: "power3.out" }
+            { scale: 1, y: 0, opacity: 1, duration: 1.1, ease: "power3.out", clearProps: "transform" }
         )
         .fromTo(card.querySelector("img"),
             { scale: 1.15, filter: "blur(8px)" },
             { scale: 1.02, filter: "blur(0px)", duration: 1.1, ease: "power3.out" },
             "-=0.9"
         )
-        .from(".hero-stagger", { y: 40, opacity: 0, stagger: 0.1, duration: 0.9, ease: "power4.out" }, "-=0.9");
+        .from(".hero-stagger", { y: 40, opacity: 0, stagger: 0.1, duration: 0.9, ease: "power4.out", clearProps: "transform" }, "-=0.9");
     }
 
     return { animate };
@@ -299,19 +315,17 @@ const HeroController = (() => {
 function initScrollReveals() {
     if (!gsapAvailable || typeof ScrollTrigger === "undefined") return;
 
-    const isMobile = window.innerWidth < 768;
-    const revealDuration = isMobile ? 0.5 : 1.1;
+    const revealDistance = prefersReducedMotion ? 0 : (isMobile ? 40 : 100);
+    const revealDuration = prefersReducedMotion ? 0.01 : 1.1;
 
     gsap.utils.toArray(".story-image").forEach((el) => {
         gsap.from(el, {
-            y: isMobile ? 20 : 0, 
-            opacity: 0, 
+            x: isMobile ? 0 : -revealDistance,
+            y: isMobile ? 30 : 0,
+            opacity: 0,
             duration: revealDuration,
-            scrollTrigger: { 
-                trigger: el, 
-                start: "top 85%",
-                toggleActions: "play none none none" // Only run once
-            },
+            clearProps: "transform",
+            scrollTrigger: { trigger: el, start: "top 82%", once: true },
         });
     });
 
@@ -321,7 +335,8 @@ function initScrollReveals() {
             y: isMobile ? 30 : 0,
             opacity: 0,
             duration: revealDuration,
-            scrollTrigger: { trigger: el, start: "top 82%" },
+            clearProps: "transform",
+            scrollTrigger: { trigger: el, start: "top 82%", once: true },
         });
     });
 }
@@ -336,7 +351,7 @@ const VenueController = (() => {
         if (!heading && !cards.length) return;
         hasAnimated = true;
 
-        const trigger = { trigger: "#venue", start: "top 75%" };
+        const trigger = { trigger: "#venue", start: "top 75%", once: true };
 
         if (heading) {
             gsap.from(heading, {
@@ -344,6 +359,7 @@ const VenueController = (() => {
                 opacity: 0,
                 duration: 0.9,
                 ease: "power3.out",
+                clearProps: "transform",
                 scrollTrigger: trigger,
             });
         }
@@ -596,7 +612,16 @@ const FlowerController = (() => {
         `<svg width="28" height="28" viewBox="0 0 64 64" fill="none"><path d="M32 12C36 20 46 22 48 32C46 42 36 44 32 52C28 44 18 42 16 32C18 22 28 20 32 12Z" fill="#fff3df"/></svg>`,
     ];
 
-    const MAX_ACTIVE_FLOWERS = isMobile ? 8 : 24;
+    // Parse each template once; every spawned flower gets a cheap clone
+    // instead of re-parsing an HTML string on the hot path.
+    const flowerTemplates = flowerSvgs.map((svg) => {
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = svg;
+        return wrapper.firstElementChild;
+    });
+
+    const MAX_ACTIVE_FLOWERS = isMobile ? (isLowEndDevice ? 4 : 8) : 24;
+    const CADENCE_MS = isMobile ? (isLowEndDevice ? 5200 : 3800) : 900;
     let activeCount = 0;
     let burstTimeouts = [];
     let intervalId = null;
@@ -612,7 +637,7 @@ const FlowerController = (() => {
 
         const depthRandom = Math.random();
         flower.classList.add(depthRandom < 0.33 ? "depth-far" : depthRandom < 0.66 ? "depth-mid" : "depth-near");
-        flower.innerHTML = flowerSvgs[Math.floor(Math.random() * flowerSvgs.length)];
+        flower.appendChild(flowerTemplates[Math.floor(Math.random() * flowerTemplates.length)].cloneNode(true));
         dom.flowerContainer.appendChild(flower);
 
         const startX = Math.random() * window.innerWidth;
@@ -681,7 +706,7 @@ const FlowerController = (() => {
     function start() {
         if (!dom.flowerContainer || prefersReducedMotion) return;
 
-        const totalFlowers = isMobile ? 6 : 20;
+        const totalFlowers = isMobile ? (isLowEndDevice ? 4 : 6) : 20;
         const delayStep = isMobile ? 650 : 300;
 
         for (let i = 0; i < totalFlowers; i++) {
@@ -689,7 +714,7 @@ const FlowerController = (() => {
         }
 
         clearInterval(intervalId);
-        intervalId = setInterval(createFlower, isMobile ? 3800 : 900);
+        intervalId = setInterval(createFlower, CADENCE_MS);
 
         // Celebratory burst only — stop generating new flowers after ~20s.
         clearTimeout(stopTimeoutId);
@@ -708,7 +733,7 @@ const FlowerController = (() => {
             paused = Boolean(intervalId);
             stop();
         } else if (paused) {
-            intervalId = setInterval(createFlower, isMobile ? 3800 : 900);
+            intervalId = setInterval(createFlower, CADENCE_MS);
             paused = false;
         }
     }
@@ -725,17 +750,29 @@ const PetalController = (() => {
     let revealDone = false;
     const COMPLETION_THRESHOLD = 0.68;
 
+    // Cached list of not-yet-touched petals + their bounding rects, kept
+    // in memory instead of re-running querySelectorAll + getBoundingClientRect
+    // on every single pointermove (that pattern was forcing a synchronous
+    // layout for up to 110 elements per event — the single biggest jank
+    // source while dragging on mobile).
+    let livePetals = [];
+    let rectsDirty = true;
+
     function buildField() {
         if (!dom.petalField || !dom.petalCard || !dom.saveDateContent) return;
 
         dom.petalField.innerHTML = "";
         removedPetals = 0;
         revealDone = false;
-        totalPetals = isSmallMobile ? 35 : (isMobile ? 55 : 110);
+        livePetals = [];
+        rectsDirty = true;
+        totalPetals = isSmallMobile ? 30 : (isMobile ? (isLowEndDevice ? 40 : 55) : 110);
 
         if (gsapAvailable) {
             gsap.set(dom.saveDateContent, { opacity: 0, scale: 0.92, filter: "blur(8px)" });
         }
+
+        const fragment = document.createDocumentFragment();
 
         for (let i = 0; i < totalPetals; i++) {
             const petal = document.createElement("div");
@@ -753,7 +790,8 @@ const PetalController = (() => {
                 gsap.set(petal, { xPercent: -50, yPercent: -50, rotate, scale, opacity: 1 });
             }
 
-            dom.petalField.appendChild(petal);
+            fragment.appendChild(petal);
+            livePetals.push(petal);
 
             if (gsapAvailable && !isMobile && !prefersReducedMotion) {
                 gsap.to(petal, {
@@ -766,6 +804,22 @@ const PetalController = (() => {
                 });
             }
         }
+
+        // Single DOM write instead of `totalPetals` individual appends.
+        dom.petalField.appendChild(fragment);
+        rectsDirty = true;
+    }
+
+    function refreshRectsIfNeeded() {
+        if (!rectsDirty) return;
+        // One batched read pass for every live petal — far cheaper than
+        // a read per pointer event.
+        for (const petal of livePetals) {
+            const rect = petal.getBoundingClientRect();
+            petal._cx = rect.left + rect.width / 2;
+            petal._cy = rect.top + rect.height / 2;
+        }
+        rectsDirty = false;
     }
 
     function removeOne(petal) {
@@ -773,6 +827,9 @@ const PetalController = (() => {
 
         petal.classList.add("touched");
         removedPetals++;
+
+        const idx = livePetals.indexOf(petal);
+        if (idx !== -1) livePetals.splice(idx, 1);
 
         if (gsapAvailable) {
             gsap.to(petal, {
@@ -797,7 +854,8 @@ const PetalController = (() => {
         if (revealDone) return;
         revealDone = true;
 
-        const remaining = document.querySelectorAll(".mini-petal:not(.touched)");
+        const remaining = livePetals.slice();
+        livePetals = [];
 
         if (gsapAvailable) {
             gsap.to(".mini-petal", {
@@ -826,34 +884,67 @@ const PetalController = (() => {
 
     function handleMove(clientX, clientY, radius) {
         if (revealDone) return;
-        document.querySelectorAll(".mini-petal:not(.touched)").forEach((petal) => {
-            const rect = petal.getBoundingClientRect();
-            const px = rect.left + rect.width / 2;
-            const py = rect.top + rect.height / 2;
-            if (Math.hypot(clientX - px, clientY - py) < radius) {
+        refreshRectsIfNeeded();
+
+        const radiusSq = radius * radius;
+        // Iterate a snapshot since removeOne() mutates livePetals mid-loop.
+        for (const petal of livePetals.slice()) {
+            const dx = clientX - petal._cx;
+            const dy = clientY - petal._cy;
+            if (dx * dx + dy * dy < radiusSq) {
                 removeOne(petal);
             }
-        });
+        }
     }
 
+    let initialized = false;
+
     function init() {
-        if (!dom.petalCard || !dom.petalField) return;
+        if (initialized || !dom.petalCard || !dom.petalField) return;
+        initialized = true;
         buildField();
 
         let touchActive = false;
+        let pendingMove = null;
+        let rafId = null;
 
-        dom.petalCard.addEventListener("pointerdown", () => { touchActive = true; });
-        dom.petalCard.addEventListener("pointerup", () => { touchActive = false; });
+        function flushMove() {
+            rafId = null;
+            if (!pendingMove) return;
+            const { x, y, radius } = pendingMove;
+            pendingMove = null;
+            handleMove(x, y, radius);
+        }
+
+        function queueMove(x, y, radius) {
+            pendingMove = { x, y, radius };
+            if (rafId === null) {
+                rafId = requestAnimationFrame(flushMove);
+            }
+        }
+
+        dom.petalCard.addEventListener("pointerdown", () => {
+            touchActive = true;
+            rectsDirty = true; // card may have settled into place since layout; refresh once.
+        }, { passive: true });
+
+        dom.petalCard.addEventListener("pointerup", () => { touchActive = false; }, { passive: true });
+        dom.petalCard.addEventListener("pointercancel", () => { touchActive = false; }, { passive: true });
 
         dom.petalCard.addEventListener("pointermove", (e) => {
             const radius = e.pointerType === "touch" ? 50 : 42;
             if (e.pointerType === "touch" && !touchActive) return;
-            handleMove(e.clientX, e.clientY, radius);
-        });
+            queueMove(e.clientX, e.clientY, radius);
+        }, { passive: true });
 
         dom.petalCard.addEventListener("pointerdown", (e) => {
             handleMove(e.clientX, e.clientY, 55);
-        });
+        }, { passive: true });
+
+        // Rects only need recomputing if the card's on-page position could
+        // have changed (scroll/orientation change) — not on every touch.
+        window.addEventListener("scroll", () => { rectsDirty = true; }, { passive: true });
+        window.addEventListener("resize", () => { rectsDirty = true; }, { passive: true });
 
         // Keyboard / accessible fallback — always available, never leaves the date hidden.
         if (dom.petalFallbackBtn) {
@@ -880,15 +971,29 @@ function initGlobalVisibilityHandling() {
 /* =====================================================================
    MAIN INITIALIZATION
 ===================================================================== */
+const runWhenIdle = (fn) => {
+    if ("requestIdleCallback" in window) {
+        requestIdleCallback(fn, { timeout: 1500 });
+    } else {
+        setTimeout(fn, 0);
+    }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
-    initCustomCursor();
-    MusicController.init();
+    // Critical path only: gets the entry gate interactive and the
+    // countdown numbers correct on first paint.
     initIntro();
-    initScrollReveals();
-    initScrollProgress();
-    CountdownCelebrationController.init();
+    MusicController.init();
     CountdownController.init();
-    PetalController.init();
     initGlobalVisibilityHandling();
-    
+
+    // Everything below is cosmetic/progressive-enhancement and can wait
+    // a tick so it doesn't compete with the intro animation for the
+    // main thread on low-end devices.
+    runWhenIdle(() => {
+        initCustomCursor();
+        initScrollReveals();
+        initScrollProgress();
+        CountdownCelebrationController.init();
+    });
 });

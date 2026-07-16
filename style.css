@@ -26,6 +26,11 @@ button {
 
 section {
     position: relative;
+    /* CSS containment: isolate layout/paint work per section so scroll-
+       triggered animation and offscreen sections don't force whole-page
+       reflow/repaint. Safe here because no position:fixed descendants
+       live inside <section> elements. */
+    contain: layout style paint;
 }
 
 /* =====================================================================
@@ -500,6 +505,40 @@ button:focus-visible,
     .venue-card:hover {
         transform: none;
     }
+
+    /* --- Cap the most GPU-expensive effects on mobile -------------------
+       Large filter:blur() decorative glows (radius up to 140px) and
+       backdrop-filter blur are, by far, the single biggest paint/GPU
+       cost on mid-range phones — far more than box-shadow or gradients.
+       Capping the radius keeps the same soft "glow" look at a fraction
+       of the compositing cost. Targets Tailwind's arbitrary-value
+       classes directly so no markup changes are needed. */
+    [class*="blur-["] {
+        filter: blur(26px) !important;
+    }
+
+    .backdrop-blur-xl {
+        -webkit-backdrop-filter: blur(10px) !important;
+        backdrop-filter: blur(10px) !important;
+    }
+
+    /* Decorative full-bleed radial gradients repaint on every scroll on
+       some Android WebViews when layered with blur siblings; promoting
+       them to their own compositor layer avoids that repaint cascade
+       without changing how they look. */
+    section > .absolute[class*="rounded-full"][class*="blur-"] {
+        will-change: transform;
+        transform: translateZ(0);
+    }
+}
+
+/* Reduced-data / save-data users and very low-end devices: skip the
+   decorative glow layers entirely rather than just shrinking them. */
+@media (max-width: 768px) {
+    .save-data #flowerGlow,
+    .save-data .flower-glow {
+        display: none !important;
+    }
 }
 
 @media (max-width: 380px) {
@@ -524,32 +563,14 @@ button:focus-visible,
     html {
         scroll-behavior: auto;
     }
-}
 
+    .flower,
+    .particle,
+    .mini-petal {
+        display: none !important;
+    }
 
-
-
-/* Promote animated elements to the GPU layer */
-.hero-stagger, .svg-ring, #hero-card-reveal, .story-image, .story-content {
-    will-change: transform, opacity;
-}
-
-/* Responsive Adjustments for Performance */
-@media (max-width: 768px) {
-    /* Disable expensive filter effects */
-    .svg-ring, .hero-stagger, #hero-card-reveal img {
+    [class*="blur-["] {
         filter: none !important;
-        box-shadow: none !important;
-    }
-    
-    /* Remove backdrop-filter which causes severe lag on mobile Safari/Chrome */
-    #countdownCelebration {
-        backdrop-filter: none !important;
-        background-color: #f4ead8 !important; 
-    }
-
-    /* Disable hover-based transforms that cause layout shifts */
-    .count-box:hover, .venue-card:hover, .music-btn:hover {
-        transform: none !important;
     }
 }
