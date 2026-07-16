@@ -498,7 +498,7 @@ button:focus-visible,
     }
 
     #flowerContainer {
-        opacity: 0.5;
+        display: none;
     }
 
     .flower {

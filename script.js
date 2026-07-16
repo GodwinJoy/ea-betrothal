@@ -719,7 +719,12 @@ const FlowerController = (() => {
     }
 
     function start() {
-        if (!dom.flowerContainer || prefersReducedMotion) return;
+        // The falling-flower burst was the last major source of scroll
+        // jank on mobile (dozens of GSAP-tweened, glow-emitting elements
+        // animating for ~20s right as someone starts scrolling through
+        // the page). Desktop keeps the full effect; mobile skips it
+        // entirely rather than just scaling it down further.
+        if (!dom.flowerContainer || prefersReducedMotion || isMobile) return;
 
         const totalFlowers = isMobile ? (isLowEndDevice ? 4 : 6) : 20;
         const delayStep = isMobile ? 650 : 300;
